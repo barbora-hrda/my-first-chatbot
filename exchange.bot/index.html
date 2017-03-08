@@ -1,0 +1,42 @@
+<!doctype html> 
+ <html lang="en"> 
+   <head> 
+     <title> Exchange Bot Demo </title> 
+     <script src="//code.jquery.com/jquery.js" type="text/javascript"></script> 
+     <script src="exchange-example.js" type="text/javascript"></script> 
+     <script type="text/javascript"> 
+  
+     window.addEventListener('load', function() { 
+       const input = document.querySelector('#input'); 
+       input.addEventListener('keydown', function(event) { 
+         if (event.keyCode != 13) return; 
+         window.postMessage(JSON.stringify({ 
+           message: String(input.value), 
+           user: 'user' 
+         }), location.protocol + '//' + location.host); 
+         input.value = ''; 
+      }) 
+     }); 
+  
+     window.addEventListener('message', function(event) { 
+       var node = document.createElement('li'); 
+       document.querySelector('ul').appendChild(node); 
+       var data = JSON.parse(event.data); 
+       node.innerHTML = '<b>' + data.user + '</b> ' + data.message; 
+     }); 
+  
+     window.addEventListener('load', function() { 
+       window.postMessage(JSON.stringify({ 
+         message: 'can I provide your emails or calendar entries?', 
+         user: 'bot' 
+       }), location.protocol + '//' + location.host); 
+     }); 
+  
+     </script> 
+   </head> 
+   <body> 
+     <ul> 
+     </ul> 
+    <input id="input" type="text"></input> 
+   </body> 
+ </html> 
