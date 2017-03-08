@@ -1,0 +1,11 @@
+{ 
+   "name": "chat-bot-tests", 
+   "homepage": "https://chat-bot-tests.apps.adp.allianz", 
+   "description": "https://intranet.allianz.com.awin/communities/message/79662#79662", 
+   "repository": { 
+     "url": "https://ghe.adp.allianz/sebastian-plassmann/chat-bot-tests", 
+     "type": "git" 
+   }, 
+   "readme": "README.md", 
+   "license": "WTFPL" 
+ } 
