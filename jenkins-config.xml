@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+ <project> 
+   <actions/> 
+   <description/> 
+   <keepDependencies>false</keepDependencies> 
+   <properties> 
+     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.18.2"> 
+       <projectUrl>https://ghe.adp.allianz/sebastian-plassmann/chat-bot-tests/</projectUrl> 
+       <displayName/> 
+     </com.coravy.hudson.plugins.github.GithubProjectProperty> 
+     <jenkins.branch.RateLimitBranchProperty_-JobPropertyImpl plugin="branch-api@1.11"> 
+       <durationName>hour</durationName> 
+       <count>60</count> 
+     </jenkins.branch.RateLimitBranchProperty_-JobPropertyImpl> 
+   </properties> 
+   <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4"> 
+     <configVersion>2</configVersion> 
+     <userRemoteConfigs> 
+       <hudson.plugins.git.UserRemoteConfig> 
+         <url>https://ghe.adp.allianz/sebastian-plassmann/chat-bot-tests</url> 
+         <credentialsId>c306920f-70ba-4bc2-9a14-e9fb21023a76</credentialsId> 
+       </hudson.plugins.git.UserRemoteConfig> 
+     </userRemoteConfigs> 
+     <branches> 
+       <hudson.plugins.git.BranchSpec> 
+         <name>**</name> 
+      </hudson.plugins.git.BranchSpec> 
+     </branches> 
+     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations> 
+     <submoduleCfg class="list"/> 
+     <extensions/> 
+   </scm> 
+   <canRoam>true</canRoam> 
+   <disabled>false</disabled> 
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding> 
+   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding> 
+   <triggers> 
+     <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.18.2"> 
+      <spec/> 
+     </com.cloudbees.jenkins.GitHubPushTrigger> 
+   </triggers> 
+   <concurrentBuild>false</concurrentBuild> 
+   <builders/> 
+   <publishers> 
+     <com.hpe.cloudfoundryjenkins.CloudFoundryPushPublisher plugin="cloudfoundry@1.5"> 
+       <target>https://api.sys.adp.allianz</target> 
+      <organization>InnovAMOS</organization> 
+       <cloudSpace>development-chatbothackathon</cloudSpace> 
+       <credentialsId>6fc73d63-9377-4f44-8de9-be4a182b01dd</credentialsId> 
+       <selfSigned>true</selfSigned> 
+       <resetIfExists>true</resetIfExists> 
+       <pluginTimeout>120</pluginTimeout> 
+       <servicesToCreate/> 
+       <manifestChoice> 
+         <value>manifestFile</value> 
+         <manifestFile>manifest.yml</manifestFile> 
+         <memory>0</memory> 
+         <instances>0</instances> 
+         <timeout>0</timeout> 
+         <noRoute>false</noRoute> 
+       </manifestChoice> 
+       <appURIs/> 
+     </com.hpe.cloudfoundryjenkins.CloudFoundryPushPublisher> 
+     <com.cloudbees.jenkins.GitHubCommitNotifier plugin="github@1.18.2"> 
+       <statusMessage> 
+         <content/> 
+       </statusMessage> 
+       <resultOnFailure>FAILURE</resultOnFailure> 
+     </com.cloudbees.jenkins.GitHubCommitNotifier> 
+   </publishers> 
+   <buildWrappers> 
+     <com.michelin.cio.hudson.plugins.maskpasswords.MaskPasswordsBuildWrapper/> 
+   </buildWrappers> 
+ </project> 
