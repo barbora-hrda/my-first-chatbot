@@ -1,0 +1,35 @@
+# https://git-scm.com/docs/git-config#_configuration_file 
+[user] 
+        email = barbora.hrda@allianz.de 
+        name = barbora-hrda 
+  
+# http://userca.allianz.de.awin/ 
+ [http] 
+         sslCAInfo = /home/e9qg9nn/git-certs/az-ca-bundle.pem 
+         sslCert = /home/e9qg9nn/git-certs/e9qg9nn.pem 
+         sslKey = /home/e9qg9nn/git-certs/e9qg9nn.key 
+         sslVerify = true 
+ 
+# https://en.wikipedia.org/wiki/Editor_war#Benefits_of_vi-like_editors ;-) 
+ [core] 
+        editor = vim 
+ 
+# http://www.rosipov.com/blog/use-vimdiff-as-git-mergetool 
+ [merge] 
+         tool = vimdiff 
+ 
+ # https://git-scm.com/docs/git-mergetool 
+ [mergetool] 
+         keepBackup = false 
+
+ # squelch stupid unset warning 
+ [push] 
+         default = simple 
+ 
+ # /me have color terminal! :-) 
+ [color] 
+         ui = true 
+         status = true 
+        interactive = true 
+         branch = true 
+        diff = true
