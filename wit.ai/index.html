@@ -1,0 +1,42 @@
+<!doctype html> 
+ <html lang="en"> 
+   <head> 
+     <title> ChatBot Demo </title> 
+ 
+
+     <script type="text/javascript" src="//code.jquery.com/jquery.js"></script> 
+     <script type="text/javascript"> 
+  
+     jQuery( function() { 
+  
+       jQuery( 'input:first' ).keyup( function( event ) { 
+         if( event.keyCode != 13 ) return; 
+         jQuery( '<li />' ) 
+           .text( 'YOU (TEXT) ' + this.value.trim() ) 
+           .appendTo( 'ul:first' ); 
+  
+         jQuery.ajax( { 
+           url: 'https://api.wit.ai/message', 
+           data: { 'q': this.value.trim(), 
+             'access_token' : 'AKMNBKSZFFOQJXHDFH7NXVGTP4RYWL2Z' }, 
+           dataType: 'jsonp', 
+           method: 'GET', 
+           success: function( response ) { 
+             console.log( response ); 
+             jQuery( '<li />' ) 
+               .text( 'BOT (TEXT) ' + response._text ) 
+               .appendTo( 'ul:first' ); 
+           } 
+         } ); 
+       } ); 
+     } ); 
+  
+  
+     </script> 
+   </head> 
+   <body> 
+     <ul> 
+     </ul> 
+     <input id="input" type="text"></input> 
+   </body> 
+ </html>
