@@ -1,0 +1,58 @@
+<!doctype html> 
+ <html lang="en"> 
+   <head> 
+     <title> People Search Bot Demo </title> 
+     <script type="text/javascript"> 
+  
+     window.addEventListener('load', function() { 
+       const input = document.querySelector( '#input' ); 
+       input.addEventListener( 'keydown', function( event ) { 
+         if( event.keyCode != 13 ) return; 
+         window.postMessage( JSON.stringify( { 
+           message: 'search for ' + input.value, 
+           user : 'user' 
+         }), location.protocol + '//' + location.host ); 
+         var request = new XMLHttpRequest(); 
+         request.onreadystatechange = function() { 
+           if (request.readyState < 4) return; 
+           if (request.status != 200) return alert(request.statusText); 
+           JSON.parse(request.responseText).list.forEach( function( person ) { 
+             window.postMessage( JSON.stringify( { 
+               message: 'found <a href="'+person.resources.html.ref+'">'+person.displayName+'</a>' + 
+                 '<img src="'+person.resources.avatar.ref+'" width="32" height="32">', 
+               user : 'bot' 
+             }), location.protocol + '//' + location.host ); 
+           }); 
+         }; 
+         // https://developers.jivesoftware.com/api/v3/cloud/rest/SearchService.html#searchPeople%28List%3CString%3E,%20String,%20String,%20int,%20int,%20String,%20String%29 
+         request.open('GET', 'https://intranet.allianz.com.awin/communities/api/core/v3/search/people' + 
+           '?filter=search('+encodeURIComponent(String( input.value ))+')&count=3'); 
+        request.send(null); 
+         input.value = ''; 
+       }) 
+     }); 
+  
+     window.addEventListener('message', function(event) { 
+       var node = document.createElement( 'li'); 
+       document.querySelector('ul').appendChild( node ); 
+       var data = JSON.parse(event.data); 
+       node.innerHTML = '<b>' + data.user + '</b> ' + data.message; 
+     }); 
+  
+     window.addEventListener('load', function() { 
+         var msie = navigator.appName == 'Microsoft Internet Explorer' || /Trident/.test( navigator.userAgent ); 
+         window.postMessage( JSON.stringify( { 
+           message:msie?'are you searching for a person?': 
+             'sorry, I\'m a stupid bot and I only work with Internet Explorer', 
+           user : 'bot' 
+         }), location.protocol + '//' + location.host ); 
+     }); 
+  
+     </script> 
+   </head> 
+   <body> 
+     <ul> 
+     </ul> 
+     <input id="input" type="text"></input> 
+   </body> 
+ </html> 
