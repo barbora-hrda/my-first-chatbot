@@ -1,0 +1,92 @@
+<!doctype html> 
+ <html lang="en"> 
+   <head> 
+     <title> Ticketing Bot Demo </title> 
+     <script type="text/javascript"> 
+  
+     window.addEventListener('load', function() { 
+       const input = document.querySelector( '#input' ); 
+       input.addEventListener( 'keydown', function( event ) { 
+         if( event.keyCode != 13 ) return; 
+         window.postMessage( JSON.stringify( { 
+           message:String( input.value ), 
+           user : 'user' 
+         }), location.protocol + '//' + location.host ); 
+         input.value = ''; 
+       }) 
+     }); 
+  
+     window.addEventListener('message', function(event) { 
+       var node = document.createElement( 'li'); 
+       document.querySelector('ul').appendChild( node ); 
+       var data = JSON.parse(event.data); 
+       node.innerHTML = '<b>' + data.user + '</b> ' + data.message; 
+     }); 
+  
+     window.addEventListener('message', function(event) { 
+       var data = JSON.parse(event.data); 
+       if( data.user == 'bot' ) return; 
+         var ticket = { 
+           Servicepartner: 'AMOS', 
+           ExternalID: 'Hackathon', 
+           Title: data.message, 
+           FunctionGroup: 'AMOS.OMG.SOLUTION-DB', 
+           Impact: 'D', 
+           Severity: '4', 
+           CustomerGroup: 'OPERATION CENTER', 
+           Worklog: 'https://ghe.adp.allianz/sebastian-plassmann/chat-bot-tests', 
+           TicketType: 'INC', 
+           Category: 'INFOCALL', 
+           Component: 'NACHFRAGE', 
+           Detail: 'SONSTIGES', 
+           InputChanel: 'Portal' 
+         }; 
+         var request = new XMLHttpRequest(); 
+         request.onreadystatechange = function() { 
+           if (request.readyState < 4) return; 
+           if (request.status != 200) return alert(request.statusText); 
+           window.postMessage( JSON.stringify( { 
+             message:'I have opened a ticket for you: ' + request.responseText, 
+             user : 'bot' 
+           }), location.protocol + '//' + location.host ); 
+         }; 
+         // https://ipm.allianz.com.awin/arsys/WSDL/public/arsap01.muc.allianz/IPM_WS_SST_SPOC 
+         request.open('POST', 'https://solution-db.allianz.com.awin/ipm/index.php'); 
+         request.setRequestHeader('Accept', 'application/xml, text/xml, */*'); 
+         request.setRequestHeader('SOAPAction', 'urn:INC_ICT_TicketListe'); 
+         var formdata = []; 
+         for (var key in ticket) 
+           formdata.push(encodeURIComponent(key) + '=' + encodeURIComponent(ticket[key])); 
+         request.send(formdata.join('&')); 
+     }); 
+  
+     window.addEventListener('load', function() { 
+       var request = new XMLHttpRequest(); 
+       request.onreadystatechange = function() { 
+         if (request.readyState < 4) return; 
+         if (request.status != 200) return alert(request.statusText); 
+         var parse = /^([^\ ]+)\ \/\ ([^\ ]+)\ \(([^\,]+),\ ([^\)]+)\)([^\(]+)/.exec(request.responseText); 
+         var userdata = { 
+           orga: parse.pop(), 
+           first: parse.pop(), 
+           last: parse.pop(), 
+           email: parse.pop(), 
+           bensl: parse.pop() 
+         }; 
+         window.postMessage( JSON.stringify( { 
+77           message:userdata.first + ', please describe your problem!', 
+78           user : 'bot' 
+79         }), location.protocol + '//' + location.host ); 
+80       }; 
+81       request.open('GET', 'https://solution-db.allianz.com.awin/ipm/user.php'); 
+82       request.send(null); 
+83     }); 
+84  
+85     </script> 
+86   </head> 
+87   <body> 
+88     <ul> 
+89     </ul> 
+90     <input id="input" type="text"></input> 
+91   </body> 
+92 </html> 
